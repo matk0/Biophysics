@@ -2,7 +2,7 @@
 title: Mitochondrial biophysics
 type: branch
 created: 2026-08-30
-updated: 2026-08-30
+updated: 2026-09-01
 sources: []
 tags: [branch, mitochondrial-biophysics]
 primary_branch: mitochondrial-biophysics
@@ -25,6 +25,7 @@ This branch studies the physical behaviour of mitochondria, including electron f
 
 ## Related branches
 
+- [[Branches/biochemistry|Biochemistry]]
 - [[Branches/lipids|Lipids]]
 - [[Branches/neurochemistry|Neurochemistry]]
 

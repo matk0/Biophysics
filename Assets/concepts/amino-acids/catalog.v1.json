@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "proteinogenic-amino-acids",
+  "concept": "amino-acids",
+  "kind": "molecule_collection",
+  "molecules": [
+    { "id": "alanine", "names": { "en": "L-Alanine", "sk": "Alanín" }, "formula": "C₃H₇NO₂", "group": "hydrophobic", "pubchemName": "L-alanine", "structure": "molecules/alanine.sdf" },
+    { "id": "arginine", "names": { "en": "L-Arginine", "sk": "Arginín" }, "formula": "C₆H₁₄N₄O₂", "group": "charged", "pubchemName": "L-arginine", "structure": "molecules/arginine.sdf" },
+    { "id": "asparagine", "names": { "en": "L-Asparagine", "sk": "Asparagín" }, "formula": "C₄H₈N₂O₃", "group": "polar", "pubchemName": "L-asparagine", "structure": "molecules/asparagine.sdf" },
+    { "id": "aspartic-acid", "names": { "en": "L-Aspartic acid", "sk": "Kyselina asparágová" }, "formula": "C₄H₇NO₄", "group": "charged", "pubchemName": "L-aspartic acid", "structure": "molecules/aspartic-acid.sdf" },
+    { "id": "cysteine", "names": { "en": "L-Cysteine", "sk": "Cysteín" }, "formula": "C₃H₇NO₂S", "group": "special", "pubchemName": "L-cysteine", "structure": "molecules/cysteine.sdf" },
+    { "id": "glutamic-acid", "names": { "en": "L-Glutamic acid", "sk": "Kyselina glutámová" }, "formula": "C₅H₉NO₄", "group": "charged", "pubchemName": "L-glutamic acid", "structure": "molecules/glutamic-acid.sdf" },
+    { "id": "glutamine", "names": { "en": "L-Glutamine", "sk": "Glutamín" }, "formula": "C₅H₁₀N₂O₃", "group": "polar", "pubchemName": "L-glutamine", "structure": "molecules/glutamine.sdf" },
+    { "id": "glycine", "names": { "en": "Glycine", "sk": "Glycín" }, "formula": "C₂H₅NO₂", "group": "special", "pubchemName": "glycine", "structure": "molecules/glycine.sdf" },
+    { "id": "histidine", "names": { "en": "L-Histidine", "sk": "Histidín" }, "formula": "C₆H₉N₃O₂", "group": "charged", "pubchemName": "L-histidine", "structure": "molecules/histidine.sdf" },
+    { "id": "isoleucine", "names": { "en": "L-Isoleucine", "sk": "Izoleucín" }, "formula": "C₆H₁₃NO₂", "group": "hydrophobic", "pubchemName": "L-isoleucine", "structure": "molecules/isoleucine.sdf" },
+    { "id": "leucine", "names": { "en": "L-Leucine", "sk": "Leucín" }, "formula": "C₆H₁₃NO₂", "group": "hydrophobic", "pubchemName": "L-leucine", "structure": "molecules/leucine.sdf" },
+    { "id": "lysine", "names": { "en": "L-Lysine", "sk": "Lyzín" }, "formula": "C₆H₁₄N₂O₂", "group": "charged", "pubchemName": "L-lysine", "structure": "molecules/lysine.sdf" },
+    { "id": "methionine", "names": { "en": "L-Methionine", "sk": "Metionín" }, "formula": "C₅H₁₁NO₂S", "group": "special", "pubchemName": "L-methionine", "structure": "molecules/methionine.sdf" },
+    { "id": "phenylalanine", "names": { "en": "L-Phenylalanine", "sk": "Fenylalanín" }, "formula": "C₉H₁₁NO₂", "group": "aromatic", "pubchemName": "L-phenylalanine", "structure": "molecules/phenylalanine.sdf" },
+    { "id": "proline", "names": { "en": "L-Proline", "sk": "Prolín" }, "formula": "C₅H₉NO₂", "group": "special", "pubchemName": "L-proline", "structure": "molecules/proline.sdf" },
+    { "id": "serine", "names": { "en": "L-Serine", "sk": "Serín" }, "formula": "C₃H₇NO₃", "group": "polar", "pubchemName": "L-serine", "structure": "molecules/serine.sdf" },
+    { "id": "threonine", "names": { "en": "L-Threonine", "sk": "Treonín" }, "formula": "C₄H₉NO₃", "group": "polar", "pubchemName": "L-threonine", "structure": "molecules/threonine.sdf" },
+    { "id": "tryptophan", "names": { "en": "L-Tryptophan", "sk": "Tryptofán" }, "formula": "C₁₁H₁₂N₂O₂", "group": "aromatic", "pubchemName": "L-tryptophan", "structure": "molecules/tryptophan.sdf" },
+    { "id": "tyrosine", "names": { "en": "L-Tyrosine", "sk": "Tyrozín" }, "formula": "C₉H₁₁NO₃", "group": "aromatic", "pubchemName": "L-tyrosine", "structure": "molecules/tyrosine.sdf" },
+    { "id": "valine", "names": { "en": "L-Valine", "sk": "Valín" }, "formula": "C₅H₁₁NO₂", "group": "hydrophobic", "pubchemName": "L-valine", "structure": "molecules/valine.sdf" }
+  ]
+}

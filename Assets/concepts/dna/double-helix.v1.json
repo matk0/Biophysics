@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "kind": "dna_helix",
+  "id": "double-helix",
+  "label": {
+    "en": "DNA double helix",
+    "sk": "Dvojzávitnica DNA"
+  },
+  "accessibilityLabel": {
+    "en": "Interactive molecular model of a DNA double helix",
+    "sk": "Interaktívny molekulový model dvojzávitnice DNA"
+  },
+  "basePairs": [
+    ["A", "T"],
+    ["T", "A"],
+    ["G", "C"],
+    ["C", "G"],
+    ["T", "A"],
+    ["A", "T"],
+    ["C", "G"],
+    ["G", "C"],
+    ["A", "T"],
+    ["T", "A"],
+    ["C", "G"],
+    ["G", "C"]
+  ],
+  "geometry": {
+    "basePairsPerTurn": 10.5,
+    "risePerPair": 0.42,
+    "radius": 2.2
+  }
+}

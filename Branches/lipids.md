@@ -2,7 +2,7 @@
 title: Lipids
 type: branch
 created: 2026-08-30
-updated: 2026-08-30
+updated: 2026-09-01
 sources: []
 tags: [branch, lipids]
 primary_branch: lipids
@@ -24,6 +24,7 @@ This branch collects biological lipids and their roles in energy storage, membra
 
 ## Related branches
 
+- [[Branches/biochemistry|Biochemistry]]
 - [[Branches/mitochondrial-biophysics|Mitochondrial biophysics]]
 - [[Branches/neurochemistry|Neurochemistry]]
 

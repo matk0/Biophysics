@@ -1,0 +1,25 @@
+---
+import "../styles/global.css";
+
+const { title, description, locale = "en" } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title} · Biophysics</title>
+  </head>
+  <body>
+    <header>
+      <a class="wordmark" href={`/${locale}/`}>Biophysics</a>
+      <nav aria-label="Language">
+        <a href="/en/" lang="en">English</a>
+        <a href="/sk/" lang="sk">Slovenčina</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+  </body>
+</html>

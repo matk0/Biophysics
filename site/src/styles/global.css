@@ -1,0 +1,33 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  color: #17312a;
+  background: #f4f3ed;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #176a57; }
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.25rem clamp(1rem, 4vw, 3rem);
+}
+header nav { display: flex; gap: 1rem; }
+.wordmark { color: inherit; font-weight: 750; text-decoration: none; }
+main {
+  width: min(100% - 2rem, 54rem);
+  margin: 3rem auto 6rem;
+}
+h1 { font: 700 clamp(2.5rem, 7vw, 5.5rem)/1.02 Georgia, serif; letter-spacing: -0.04em; }
+.definition { font: 400 clamp(1.25rem, 2.2vw, 1.65rem)/1.55 Georgia, serif; color: #274b41; }
+.prose { font: 400 1.075rem/1.75 Georgia, serif; }
+.prose p { margin: 1.25rem 0; }
+.concept-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .75rem; padding: 0; list-style: none; }
+.concept-list a { display: block; min-height: 100%; padding: 1rem; border: 1px solid #c8d4cc; border-radius: .75rem; background: #faf9f4; text-decoration: none; }
+.related { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #c8d4cc; }

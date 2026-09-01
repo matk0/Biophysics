@@ -2,7 +2,7 @@
 title: Neurochemistry
 type: branch
 created: 2026-08-30
-updated: 2026-08-30
+updated: 2026-09-01
 sources: []
 tags: [branch, neurochemistry]
 primary_branch: neurochemistry
@@ -25,6 +25,7 @@ This branch follows serotonin and melatonin through their biochemical, circadian
 
 ## Related branches
 
+- [[Branches/biochemistry|Biochemistry]]
 - [[Branches/mitochondrial-biophysics|Mitochondrial biophysics]]
 - [[Branches/lipids|Lipids]]
 

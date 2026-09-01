@@ -1,0 +1,27 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { loadConcepts, localizeConcept } from "../../../lib/vault.mjs";
+
+export async function getStaticPaths() {
+  const concepts = await loadConcepts();
+  return ["en", "sk"].flatMap((locale) => concepts.map((concept) => ({
+    params: { locale, slug: concept.slug },
+    props: { concept: localizeConcept(concept, locale) },
+  })));
+}
+
+const { concept } = Astro.props;
+---
+
+<Layout title={concept.title} description={concept.definition} locale={concept.locale}>
+  <article>
+    <h1>{concept.title}</h1>
+    <div class="prose" set:html={concept.body}></div>
+    {concept.related.length > 0 && (
+      <aside class="related">
+        <h2>{concept.locale === "sk" ? "Súvisiace pojmy" : "Related concepts"}</h2>
+        <ul>{concept.related.map((related) => <li><a href={`/${concept.locale}/concepts/${related.id}/`}>{related.title}</a></li>)}</ul>
+      </aside>
+    )}
+  </article>
+</Layout>

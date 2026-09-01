@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "kind": "molecule_collection",
+  "id": "proteinogenic-amino-acids",
+  "label": {
+    "en": "Proteinogenic amino acids",
+    "sk": "Proteínogénne aminokyseliny"
+  },
+  "accessibilityLabel": {
+    "en": "Interactive collection of twenty proteinogenic amino-acid molecules",
+    "sk": "Interaktívna kolekcia dvadsiatich proteínogénnych aminokyselín"
+  },
+  "initial": "alanine",
+  "items": [
+    { "id": "alanine", "label": { "en": "L-Alanine", "sk": "Alanín" }, "data": { "format": "sdf-v2000", "url": "molecules/alanine.sdf" } },
+    { "id": "arginine", "label": { "en": "L-Arginine", "sk": "Arginín" }, "data": { "format": "sdf-v2000", "url": "molecules/arginine.sdf" } },
+    { "id": "asparagine", "label": { "en": "L-Asparagine", "sk": "Asparagín" }, "data": { "format": "sdf-v2000", "url": "molecules/asparagine.sdf" } },
+    { "id": "aspartic-acid", "label": { "en": "L-Aspartic acid", "sk": "Kyselina asparágová" }, "data": { "format": "sdf-v2000", "url": "molecules/aspartic-acid.sdf" } },
+    { "id": "cysteine", "label": { "en": "L-Cysteine", "sk": "Cysteín" }, "data": { "format": "sdf-v2000", "url": "molecules/cysteine.sdf" } },
+    { "id": "glutamic-acid", "label": { "en": "L-Glutamic acid", "sk": "Kyselina glutámová" }, "data": { "format": "sdf-v2000", "url": "molecules/glutamic-acid.sdf" } },
+    { "id": "glutamine", "label": { "en": "L-Glutamine", "sk": "Glutamín" }, "data": { "format": "sdf-v2000", "url": "molecules/glutamine.sdf" } },
+    { "id": "glycine", "label": { "en": "Glycine", "sk": "Glycín" }, "data": { "format": "sdf-v2000", "url": "molecules/glycine.sdf" } },
+    { "id": "histidine", "label": { "en": "L-Histidine", "sk": "Histidín" }, "data": { "format": "sdf-v2000", "url": "molecules/histidine.sdf" } },
+    { "id": "isoleucine", "label": { "en": "L-Isoleucine", "sk": "Izoleucín" }, "data": { "format": "sdf-v2000", "url": "molecules/isoleucine.sdf" } },
+    { "id": "leucine", "label": { "en": "L-Leucine", "sk": "Leucín" }, "data": { "format": "sdf-v2000", "url": "molecules/leucine.sdf" } },
+    { "id": "lysine", "label": { "en": "L-Lysine", "sk": "Lyzín" }, "data": { "format": "sdf-v2000", "url": "molecules/lysine.sdf" } },
+    { "id": "methionine", "label": { "en": "L-Methionine", "sk": "Metionín" }, "data": { "format": "sdf-v2000", "url": "molecules/methionine.sdf" } },
+    { "id": "phenylalanine", "label": { "en": "L-Phenylalanine", "sk": "Fenylalanín" }, "data": { "format": "sdf-v2000", "url": "molecules/phenylalanine.sdf" } },
+    { "id": "proline", "label": { "en": "L-Proline", "sk": "Prolín" }, "data": { "format": "sdf-v2000", "url": "molecules/proline.sdf" } },
+    { "id": "serine", "label": { "en": "L-Serine", "sk": "Serín" }, "data": { "format": "sdf-v2000", "url": "molecules/serine.sdf" } },
+    { "id": "threonine", "label": { "en": "L-Threonine", "sk": "Treonín" }, "data": { "format": "sdf-v2000", "url": "molecules/threonine.sdf" } },
+    { "id": "tryptophan", "label": { "en": "L-Tryptophan", "sk": "Tryptofán" }, "data": { "format": "sdf-v2000", "url": "molecules/tryptophan.sdf" } },
+    { "id": "tyrosine", "label": { "en": "L-Tyrosine", "sk": "Tyrozín" }, "data": { "format": "sdf-v2000", "url": "molecules/tyrosine.sdf" } },
+    { "id": "valine", "label": { "en": "L-Valine", "sk": "Valín" }, "data": { "format": "sdf-v2000", "url": "molecules/valine.sdf" } }
+  ]
+}

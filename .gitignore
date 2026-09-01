@@ -1,2 +1,6 @@
 .DS_Store
 /.obsidian/
+/.wrangler/
+/site/dist/
+/site/node_modules/
+/site/.astro/

@@ -1,0 +1,14 @@
+{
+  "name": "biophysics-encyclopedia",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "build": "astro build"
+  },
+  "dependencies": {
+    "astro": "7.2.10",
+    "gray-matter": "4.0.3",
+    "marked": "18.0.11"
+  }
+}
