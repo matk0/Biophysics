@@ -1,9 +1,16 @@
 import { createHash } from "node:crypto";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, realpath } from "node:fs/promises";
 import path from "node:path";
 
 import matter from "gray-matter";
 import { marked } from "marked";
+import sanitizeHtml from "sanitize-html";
+
+import {
+  assertSdfV2000,
+  moleculeSources,
+  normalizeRendererSpecification,
+} from "./renderer-contract.mjs";
 
 const VAULT_ROOT = path.resolve(process.env.BIOPHYSICS_VAULT_ROOT ?? path.join(process.cwd(), ".."));
 const CONCEPTS_ROOT = path.join(VAULT_ROOT, "Concepts");
@@ -14,7 +21,14 @@ const DEFAULT_PUBLIC_SITE_ORIGIN = "https://biophysics-encyclopedia.pages.dev";
 
 function publicSiteOrigin() {
   const origin = new URL(process.env.PUBLIC_SITE_ORIGIN ?? DEFAULT_PUBLIC_SITE_ORIGIN);
-  if (origin.protocol !== "https:" || origin.username || origin.password || origin.pathname !== "/") {
+  if (
+    origin.protocol !== "https:"
+    || origin.username
+    || origin.password
+    || origin.pathname !== "/"
+    || origin.search
+    || origin.hash
+  ) {
     throw new Error("PUBLIC_SITE_ORIGIN must be an HTTPS origin without credentials or a path");
   }
   return origin.origin;
@@ -42,7 +56,19 @@ function renderMarkdown(markdown, locale) {
     /\[\[Concepts\/([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g,
     (_, slug, label) => `[${label || slug}](/${locale}/concepts/${slug}/)`,
   );
-  return marked.parse(withLinks);
+  return sanitizeHtml(marked.parse(withLinks), {
+    allowedTags: [
+      "p", "a", "em", "strong", "ul", "ol", "li", "blockquote",
+      "code", "pre", "hr", "br", "h3", "h4", "h5", "h6", "del",
+      "sub", "sup",
+    ],
+    allowedAttributes: {
+      a: ["href", "title"],
+      ol: ["start"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    allowProtocolRelative: false,
+  });
 }
 
 function plainText(markdown) {
@@ -122,28 +148,33 @@ export async function loadVisualization(concept, id) {
   if (!entry) throw new Error(`Unknown visualization: ${concept}/${id}`);
 
   const specificationPath = path.resolve(VAULT_ROOT, entry.specification);
-  const conceptAssetsRoot = path.join(ASSETS_ROOT, concept);
-  if (!specificationPath.startsWith(`${conceptAssetsRoot}${path.sep}`)) {
+  const conceptAssetsRoot = path.resolve(ASSETS_ROOT, concept);
+  if (!containedPath(conceptAssetsRoot, specificationPath)) {
+    throw new Error("Visualization specification must stay within Assets/concepts");
+  }
+  const [realConceptAssetsRoot, realSpecificationPath] = await Promise.all([
+    realpath(conceptAssetsRoot),
+    realpath(specificationPath),
+  ]);
+  if (!containedPath(realConceptAssetsRoot, realSpecificationPath)) {
     throw new Error("Visualization specification must stay within Assets/concepts");
   }
 
-  const specification = JSON.parse(await readFile(specificationPath, "utf8"));
+  const specification = JSON.parse(await readFile(realSpecificationPath, "utf8"));
   if (specification.version !== 1 || specification.id !== id) {
     throw new Error(`Visualization identity mismatch: ${concept}/${id}`);
   }
 
-  if (specification.kind === "molecule_collection") {
-    const origin = publicSiteOrigin();
-    specification.items = specification.items.map((item) => ({
-      ...item,
-      data: {
-        ...item.data,
-        url: `${origin}/assets/concepts/${concept}/${item.data.url}`,
-      },
-    }));
+  const normalized = await normalizeRendererSpecification(specification, {
+    concept,
+    conceptAssetsRoot: realConceptAssetsRoot,
+    specificationPath: realSpecificationPath,
+    publicOrigin: publicSiteOrigin(),
+  });
+  for (const source of moleculeSources(normalized)) {
+    if (source.url !== undefined) publicStructureReference(concept, source.url);
   }
-
-  return specification;
+  return normalized;
 }
 
 export async function loadMoleculeStructure(concept, molecule) {
@@ -151,9 +182,10 @@ export async function loadMoleculeStructure(concept, molecule) {
     throw new Error("Invalid molecule identifier");
   }
 
-  const specification = await loadVisualization(concept, "proteinogenic-amino-acids");
-  const entry = specification.items.find(({ id }) => id === molecule);
-  if (!entry) throw new Error(`Unknown molecule: ${concept}/${molecule}`);
+  const structures = await loadMoleculeStructurePaths();
+  if (!structures.some((entry) => entry.concept === concept && entry.molecule === molecule)) {
+    throw new Error(`Unknown molecule: ${concept}/${molecule}`);
+  }
 
   const structurePath = path.resolve(
     ASSETS_ROOT,
@@ -161,14 +193,59 @@ export async function loadMoleculeStructure(concept, molecule) {
     "molecules",
     `${molecule}.sdf`,
   );
-  if (!structurePath.startsWith(`${ASSETS_ROOT}${path.sep}`)) {
+  const conceptAssetsRoot = path.resolve(ASSETS_ROOT, concept);
+  if (!containedPath(conceptAssetsRoot, structurePath)) {
     throw new Error("Molecule structure must stay within Assets/concepts");
   }
-  return readFile(structurePath, "utf8");
+  const [realConceptAssetsRoot, realStructurePath] = await Promise.all([
+    realpath(conceptAssetsRoot),
+    realpath(structurePath),
+  ]);
+  if (!containedPath(realConceptAssetsRoot, realStructurePath)) {
+    throw new Error("Molecule structure must stay within Assets/concepts");
+  }
+  return assertSdfV2000(await readFile(realStructurePath, "utf8"));
+}
+
+export async function loadMoleculeStructurePaths() {
+  const concepts = await loadConcepts();
+  const structures = new Map();
+
+  for (const concept of concepts) {
+    for (const { id } of concept.data.visualizations ?? []) {
+      const specification = await loadVisualization(concept.slug, id);
+      for (const source of moleculeSources(specification)) {
+        if (source.url === undefined) continue;
+        const reference = publicStructureReference(concept.slug, source.url);
+        structures.set(`${reference.concept}/${reference.molecule}`, reference);
+      }
+    }
+  }
+
+  return [...structures.values()].sort((left, right) => (
+    `${left.concept}/${left.molecule}`.localeCompare(`${right.concept}/${right.molecule}`)
+  ));
 }
 
 function dateString(value) {
   if (value instanceof Date) return value.toISOString().slice(0, 10);
   if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
   throw new Error(`Invalid updated date: ${String(value)}`);
+}
+
+function publicStructureReference(concept, sourceUrl) {
+  const url = new URL(sourceUrl);
+  const prefix = `/assets/concepts/${encodeURIComponent(concept)}/molecules/`;
+  if (url.origin !== publicSiteOrigin() || url.search || url.hash || !url.pathname.startsWith(prefix)) {
+    throw new Error(`Molecule URL cannot be published by this site: ${sourceUrl}`);
+  }
+  const filename = url.pathname.slice(prefix.length);
+  const match = filename.match(/^([a-z0-9]+(?:-[a-z0-9]+)*)\.sdf$/);
+  if (!match) throw new Error(`Molecule URL cannot be published by this site: ${sourceUrl}`);
+  return { concept, molecule: match[1] };
+}
+
+function containedPath(root, target) {
+  const relative = path.relative(root, target);
+  return relative !== "" && relative !== ".." && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
 }

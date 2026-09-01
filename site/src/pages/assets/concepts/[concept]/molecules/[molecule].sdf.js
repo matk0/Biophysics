@@ -1,10 +1,9 @@
-import { loadMoleculeStructure, loadVisualization } from "../../../../../lib/vault.mjs";
+import { loadMoleculeStructure, loadMoleculeStructurePaths } from "../../../../../lib/vault.mjs";
 
 export async function getStaticPaths() {
-  const specification = await loadVisualization("amino-acids", "proteinogenic-amino-acids");
-  return specification.items.map(({ id }) => ({
-    params: { concept: "amino-acids", molecule: id },
-    props: { concept: "amino-acids", molecule: id },
+  return (await loadMoleculeStructurePaths()).map(({ concept, molecule }) => ({
+    params: { concept, molecule },
+    props: { concept, molecule },
   }));
 }
 

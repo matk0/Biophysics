@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:biophysics-renderer:specification:v1",
+  "$comment": "Pinned to biophysics-renderer revision 424c31b97f38158b317f8bea95480b4f0d6f5e79.",
+  "title": "Biophysics renderer v1 specification",
+  "oneOf": [
+    { "$ref": "#/$defs/molecule" },
+    { "$ref": "#/$defs/moleculeCollection" },
+    { "$ref": "#/$defs/dnaHelix" }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9](?:[a-z0-9._-]{0,94}[a-z0-9])?$"
+    },
+    "localizedText": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 256 },
+        {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 16,
+          "propertyNames": { "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$" },
+          "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 256 }
+        }
+      ]
+    },
+    "sdfSource": {
+      "type": "object",
+      "properties": {
+        "format": { "const": "sdf-v2000" },
+        "url": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "text": { "type": "string" }
+      },
+      "required": ["format"],
+      "oneOf": [
+        {
+          "properties": { "url": { "type": "string", "minLength": 1, "maxLength": 2048 } },
+          "required": ["url"]
+        },
+        {
+          "properties": { "text": { "type": "string" } },
+          "required": ["text"]
+        }
+      ],
+      "additionalProperties": false
+    },
+    "moleculeItem": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/localizedText" },
+        "data": { "$ref": "#/$defs/sdfSource" }
+      },
+      "required": ["id", "data"],
+      "additionalProperties": false
+    },
+    "molecule": {
+      "type": "object",
+      "properties": {
+        "version": { "const": 1 },
+        "kind": { "const": "molecule" },
+        "id": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/localizedText" },
+        "accessibilityLabel": { "$ref": "#/$defs/localizedText" },
+        "data": { "$ref": "#/$defs/sdfSource" }
+      },
+      "required": ["version", "kind", "id", "data"],
+      "additionalProperties": false
+    },
+    "moleculeCollection": {
+      "type": "object",
+      "properties": {
+        "version": { "const": 1 },
+        "kind": { "const": "molecule_collection" },
+        "id": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/localizedText" },
+        "accessibilityLabel": { "$ref": "#/$defs/localizedText" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/moleculeItem" }
+        },
+        "initial": { "$ref": "#/$defs/identifier" }
+      },
+      "required": ["version", "kind", "id", "items"],
+      "additionalProperties": false
+    },
+    "dnaHelix": {
+      "type": "object",
+      "properties": {
+        "version": { "const": 1 },
+        "kind": { "const": "dna_helix" },
+        "id": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/localizedText" },
+        "accessibilityLabel": { "$ref": "#/$defs/localizedText" },
+        "basePairs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 512,
+          "items": {
+            "enum": [
+              ["A", "T"],
+              ["T", "A"],
+              ["G", "C"],
+              ["C", "G"]
+            ]
+          }
+        },
+        "geometry": {
+          "type": "object",
+          "properties": {
+            "basePairsPerTurn": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+            "risePerPair": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+            "radius": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+          },
+          "required": ["basePairsPerTurn", "risePerPair", "radius"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["version", "kind", "id", "basePairs", "geometry"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -6,6 +6,7 @@ import {
   loadConcepts,
   localizeConcept,
   loadMoleculeStructure,
+  loadMoleculeStructurePaths,
   loadVisualization,
 } from "../src/lib/vault.mjs";
 
@@ -65,13 +66,90 @@ test("the public catalogue exposes every concept in English and Slovak", async (
   }
 });
 
+test("public concept HTML removes executable Markdown while preserving prose formatting", () => {
+  const concept = {
+    slug: "unsafe-example",
+    data: {
+      title: "Unsafe example",
+      localized_titles: { sk: "Nebezpečný príklad" },
+      updated: "2026-09-01",
+      visualizations: [],
+    },
+    content: `## English
+
+Keep **useful emphasis** and [safe links](https://example.com).
+
+<script>globalThis.compromised = true</script>
+
+[unsafe link](javascript:alert(1))
+
+<img src=x onerror="globalThis.compromised = true">
+
+## Slovenčina
+
+Zachovaj **užitočné zvýraznenie**.`,
+  };
+
+  const localized = localizeConcept(concept, "en");
+
+  assert.match(localized.body, /<strong>useful emphasis<\/strong>/);
+  assert.match(localized.body, /href="https:\/\/example\.com"/);
+  assert.doesNotMatch(localized.body, /<script|javascript:|onerror|compromised/i);
+});
+
+test("public concept HTML blocks encoded protocols and active embedded elements", () => {
+  const concept = {
+    slug: "encoded-attack",
+    data: { title: "Encoded attack", updated: "2026-09-01" },
+    content: `## English
+
+<svg><a xlink:href="javascript:alert(1)">unsafe SVG</a></svg>
+
+<iframe srcdoc="<script>alert(1)</script>"></iframe>
+
+[encoded protocol](java&#x73;cript:alert(1))
+
+## Slovenčina
+
+Bezpečný text.`,
+  };
+
+  const localized = localizeConcept(concept, "en");
+
+  assert.match(localized.body, /unsafe SVG/);
+  assert.doesNotMatch(
+    localized.body,
+    /<svg|xlink:|<iframe|srcdoc=|<script|href=["']?(?:javascript|java&#x73;)/i,
+  );
+});
+
 test("scientific visualization specifications are served from concept assets", async () => {
+  const concepts = await loadConcepts();
+  const emitted = [];
+  for (const concept of concepts) {
+    for (const { id } of concept.data.visualizations ?? []) {
+      const specification = await loadVisualization(concept.slug, id);
+      assert.equal(specification.id, id);
+      emitted.push(`${concept.slug}/${id}`);
+    }
+  }
+  assert.deepEqual(emitted.sort(), [
+    "amino-acids/proteinogenic-amino-acids",
+    "dna/double-helix",
+  ]);
+
   const aminoAcids = await loadVisualization("amino-acids", "proteinogenic-amino-acids");
   assert.equal(aminoAcids.version, 1);
   assert.equal(aminoAcids.kind, "molecule_collection");
   assert.equal(aminoAcids.items.length, 20);
   assert.ok(aminoAcids.items.every(({ data }) => data.url.startsWith("https://")));
   assert.match(await loadMoleculeStructure("amino-acids", "alanine"), /V2000/);
+  const structures = await loadMoleculeStructurePaths();
+  assert.equal(structures.length, 20);
+  assert.ok(structures.some(({ concept, molecule }) => concept === "amino-acids" && molecule === "alanine"));
+  for (const structure of structures) {
+    assert.match(await loadMoleculeStructure(structure.concept, structure.molecule), /V2000/);
+  }
 
   const dna = await loadVisualization("dna", "double-helix");
   assert.equal(dna.kind, "dna_helix");
