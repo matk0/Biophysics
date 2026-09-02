@@ -59,7 +59,3 @@ When an approved change cannot be completed without a missing decision, source, 
 Mechanical edits may correct formatting, broken links, and indexes. They must not reconcile or erase differing claims, interpretations, terminology, or instructions; preserve those tensions and surface them to Matej unless he explicitly approves a resolution.
 
 After completing an approved change, verify the result and list every file changed. Include any mechanical edits in the report so Matej can distinguish the approved content change from supporting maintenance.
-
-## Git review gate
-
-Before changing the vault, require a clean Git worktree. If pre-existing changes exist, report their exact paths and do not mix them into an agent batch. After verification, stage exactly the approved paths once and present `git status --short`, `git diff --cached --find-renames=1% --word-diff=plain HEAD`, and any remaining unstaged diff. If an unstaged change appears during review, treat it as Matej's manual override: do not stage, edit, or discard it without explicit instruction. Begin no new batch until the reviewed batch is committed and the worktree is clean. Commit only after Matej explicitly accepts the complete diff. Never add a remote or push without separate approval.
