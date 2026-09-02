@@ -2,7 +2,7 @@
 title: Index
 type: index
 created: 2026-08-30
-updated: 2026-09-01
+updated: 2026-09-02
 sources: []
 tags: [index, navigation]
 primary_branch: null
@@ -16,7 +16,7 @@ branches: [biochemistry, lipids, molecular-genetics, neurochemistry, mitochondri
 - [[Branches/biochemistry|Biochemistry]] — Nutrients, amino acids, proteins, and transformations of living matter. [8 concepts, 0 sources]
 - [[Branches/lipids|Lipids]] — Biological lipids, fatty acids, and their structural and metabolic roles. [2 concepts, 1 source]
 - [[Branches/molecular-genetics|Molecular genetics]] — DNA, genes, chromosomes, and protein synthesis. [5 concepts, 0 sources]
-- [[Branches/mitochondrial-biophysics|Mitochondrial biophysics]] — Electron flow, oxygen, cold, uncoupling, and mitochondrial function. [3 concepts, 1 source]
+- [[Branches/mitochondrial-biophysics|Mitochondrial biophysics]] — Electron flow, oxygen, cold, uncoupling, and mitochondrial function. [4 concepts, 1 source]
 - [[Branches/neurochemistry|Neurochemistry]] — Serotonin, melatonin, and their biochemical and circadian context. [2 concepts, 2 sources]
 
 ## Sources
@@ -37,6 +37,7 @@ branches: [biochemistry, lipids, molecular-genetics, neurochemistry, mitochondri
 - [[Concepts/macronutrients|Macronutrients]] — Carbohydrates, proteins, and fats that make up the main nutrient groups in food. [0 sources]
 - [[Concepts/melatonin|Melatonin]] — A serotonin-derived circadian signal connected to temperature regulation and mitochondrial function. [2 sources]
 - [[Concepts/micronutrients|Micronutrients]] — Vitamins, minerals, trace elements, and other small food components. [0 sources]
+- [[Concepts/mitochondria|Mitochondria]] — Cellular organelles that convert nutrient energy into a form cells can use. [0 sources]
 - [[Concepts/mitochondrial-magnetism|Mitochondrial magnetism]] — A model connecting mitochondrial electron flow, magnetic fields, oxygen delivery, cold, and uncoupling. [1 source]
 - [[Concepts/photosynthesis|Photosynthesis]] — The light-powered formation of organic matter that begins the food chain. [0 sources]
 - [[Concepts/protein-synthesis|Protein synthesis]] — Cellular assembly of proteins from genetic instructions. [0 sources]
@@ -72,6 +73,7 @@ branches: [biochemistry, lipids, molecular-genetics, neurochemistry, mitochondri
 
 ### Mitochondrial biophysics
 
+- **Concept:** [[Concepts/mitochondria|Mitochondria]]
 - **Concept:** [[Concepts/fatty-acids|Fatty acids]]
 - **Concept:** [[Concepts/melatonin|Melatonin]]
 - **Concept:** [[Concepts/mitochondrial-magnetism|Mitochondrial magnetism]]

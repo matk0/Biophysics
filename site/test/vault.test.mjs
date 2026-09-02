@@ -22,6 +22,7 @@ const expectedSlugs = [
   "macronutrients",
   "melatonin",
   "micronutrients",
+  "mitochondria",
   "mitochondrial-magnetism",
   "photosynthesis",
   "protein-synthesis",

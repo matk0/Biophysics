@@ -2,7 +2,7 @@
 title: Mitochondrial biophysics
 type: branch
 created: 2026-08-30
-updated: 2026-09-01
+updated: 2026-09-02
 sources: []
 tags: [branch, mitochondrial-biophysics]
 primary_branch: mitochondrial-biophysics
@@ -15,6 +15,7 @@ This branch studies the physical behaviour of mitochondria, including electron f
 
 ## Concepts
 
+- [[Concepts/mitochondria|Mitochondria]]
 - [[Concepts/mitochondrial-magnetism|Mitochondrial magnetism]]
 - [[Concepts/melatonin|Melatonin]]
 - [[Concepts/fatty-acids|Fatty acids]]
