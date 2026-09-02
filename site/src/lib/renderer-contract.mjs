@@ -4,7 +4,7 @@ import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import schema from "../schemas/biophysics-renderer-v1.schema.json" with { type: "json" };
 
-export const RENDERER_REVISION = "8d35ebf2cb08de41903ed9a5269fc4e24b7608a9";
+export const RENDERER_REVISION = "590e585c20bb8950b5801d3ec57e38d49a5b03e3";
 export const MAX_SPECIFICATION_BYTES = 1_000_000;
 export const MAX_SDF_BYTES = 1_000_000;
 export const MAX_SDF_ATOMS = 1_024;

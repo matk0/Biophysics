@@ -19,7 +19,7 @@ M  END
 `;
 
 test("the pinned renderer v1 contract accepts every supported kind and rejects divergent inputs", () => {
-  assert.equal(RENDERER_REVISION, "8d35ebf2cb08de41903ed9a5269fc4e24b7608a9");
+  assert.equal(RENDERER_REVISION, "590e585c20bb8950b5801d3ec57e38d49a5b03e3");
 
   const molecule = {
     version: 1,
