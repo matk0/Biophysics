@@ -137,6 +137,7 @@ test("scientific visualization specifications are served from concept assets", a
   assert.deepEqual(emitted.sort(), [
     "amino-acids/proteinogenic-amino-acids",
     "dna/double-helix",
+    "mitochondria/mitochondrion-cutaway",
   ]);
 
   const aminoAcids = await loadVisualization("amino-acids", "proteinogenic-amino-acids");
@@ -156,6 +157,16 @@ test("scientific visualization specifications are served from concept assets", a
   assert.equal(dna.kind, "dna_helix");
   assert.equal(dna.basePairs.length, 12);
   assert.deepEqual(dna.geometry, { basePairsPerTurn: 10.5, risePerPair: 0.42, radius: 2.2 });
+
+  const mitochondrion = await loadVisualization("mitochondria", "mitochondrion-cutaway");
+  assert.equal(mitochondrion.kind, "mitochondrion");
+  assert.deepEqual(mitochondrion.geometry, {
+    length: 8,
+    radius: 2.25,
+    membraneThickness: 0.14,
+    intermembraneGap: 0.2,
+    cristae: { count: 7, depth: 2.7 },
+  });
 
   await assert.rejects(
     loadVisualization("../Raw", "anything"),

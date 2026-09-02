@@ -9,6 +9,12 @@ sources: []
 tags: [mitochondrial-biophysics]
 primary_branch: mitochondrial-biophysics
 branches: [mitochondrial-biophysics]
+visualizations:
+  - id: mitochondrion-cutaway
+    titles:
+      en: Mitochondrion cutaway
+      sk: Prierez mitochondriou
+    specification: Assets/concepts/mitochondria/mitochondrion-cutaway.v1.json
 ---
 
 # Mitochondria

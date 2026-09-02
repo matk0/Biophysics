@@ -19,7 +19,7 @@ M  END
 `;
 
 test("the pinned renderer v1 contract accepts every supported kind and rejects divergent inputs", () => {
-  assert.equal(RENDERER_REVISION, "424c31b97f38158b317f8bea95480b4f0d6f5e79");
+  assert.equal(RENDERER_REVISION, "8d35ebf2cb08de41903ed9a5269fc4e24b7608a9");
 
   const molecule = {
     version: 1,
@@ -41,10 +41,23 @@ test("the pinned renderer v1 contract accepts every supported kind and rejects d
     basePairs: [["A", "T"], ["G", "C"]],
     geometry: { basePairsPerTurn: 10.5, risePerPair: 0.42, radius: 2.2 },
   };
+  const mitochondrion = {
+    version: 1,
+    kind: "mitochondrion",
+    id: "mitochondrion-cutaway",
+    geometry: {
+      length: 8,
+      radius: 2.25,
+      membraneThickness: 0.14,
+      intermembraneGap: 0.2,
+      cristae: { count: 7, depth: 2.7 },
+    },
+  };
 
   assert.equal(assertRendererSpecification(molecule), molecule);
   assert.equal(assertRendererSpecification(collection), collection);
   assert.equal(assertRendererSpecification(dna), dna);
+  assert.equal(assertRendererSpecification(mitochondrion), mitochondrion);
 
   assert.throws(
     () => assertRendererSpecification({ ...molecule, executable: true }),
@@ -61,6 +74,13 @@ test("the pinned renderer v1 contract accepts every supported kind and rejects d
   assert.throws(
     () => assertRendererSpecification({ ...collection, initial: "missing" }),
     /initial molecule/i,
+  );
+  assert.throws(
+    () => assertRendererSpecification({
+      ...mitochondrion,
+      geometry: { ...mitochondrion.geometry, length: 4 },
+    }),
+    /length must be at least its diameter/i,
   );
 });
 

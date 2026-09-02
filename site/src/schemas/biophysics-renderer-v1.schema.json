@@ -1,12 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:biophysics-renderer:specification:v1",
-  "$comment": "Pinned to biophysics-renderer revision 424c31b97f38158b317f8bea95480b4f0d6f5e79.",
+  "$comment": "Pinned to biophysics-renderer revision 8d35ebf2cb08de41903ed9a5269fc4e24b7608a9.",
   "title": "Biophysics renderer v1 specification",
   "oneOf": [
     { "$ref": "#/$defs/molecule" },
     { "$ref": "#/$defs/moleculeCollection" },
-    { "$ref": "#/$defs/dnaHelix" }
+    { "$ref": "#/$defs/dnaHelix" },
+    { "$ref": "#/$defs/mitochondrion" }
   ],
   "$defs": {
     "identifier": {
@@ -120,6 +121,38 @@
         }
       },
       "required": ["version", "kind", "id", "basePairs", "geometry"],
+      "additionalProperties": false
+    },
+    "mitochondrion": {
+      "type": "object",
+      "properties": {
+        "version": { "const": 1 },
+        "kind": { "const": "mitochondrion" },
+        "id": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/localizedText" },
+        "accessibilityLabel": { "$ref": "#/$defs/localizedText" },
+        "geometry": {
+          "type": "object",
+          "properties": {
+            "length": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+            "radius": { "type": "number", "exclusiveMinimum": 0, "maximum": 50 },
+            "membraneThickness": { "type": "number", "exclusiveMinimum": 0, "maximum": 10 },
+            "intermembraneGap": { "type": "number", "exclusiveMinimum": 0, "maximum": 10 },
+            "cristae": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer", "minimum": 2, "maximum": 24 },
+                "depth": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+              },
+              "required": ["count", "depth"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["length", "radius", "membraneThickness", "intermembraneGap", "cristae"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["version", "kind", "id", "geometry"],
       "additionalProperties": false
     }
   }

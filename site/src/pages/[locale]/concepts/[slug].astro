@@ -1,6 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import { loadConcepts, localizeConcept } from "../../../lib/vault.mjs";
+import { rendererEmbed } from "../../../lib/visualization-embed.mjs";
 
 export async function getStaticPaths() {
   const concepts = await loadConcepts();
@@ -11,11 +12,24 @@ export async function getStaticPaths() {
 }
 
 const { concept } = Astro.props;
+const visualizations = concept.visualizations.map((visualization) => rendererEmbed(visualization, concept.locale));
 ---
 
 <Layout title={concept.title} description={concept.definition} locale={concept.locale}>
   <article>
     <h1>{concept.title}</h1>
+    {visualizations.map((visualization) => (
+      <figure class="visualization">
+        <iframe
+          src={visualization.src}
+          title={visualization.title}
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+        <figcaption>{visualization.title}</figcaption>
+      </figure>
+    ))}
     <div class="prose" set:html={concept.body}></div>
     {concept.related.length > 0 && (
       <aside class="related">

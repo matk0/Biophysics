@@ -28,6 +28,17 @@ h1 { font: 700 clamp(2.5rem, 7vw, 5.5rem)/1.02 Georgia, serif; letter-spacing: -
 .definition { font: 400 clamp(1.25rem, 2.2vw, 1.65rem)/1.55 Georgia, serif; color: #274b41; }
 .prose { font: 400 1.075rem/1.75 Georgia, serif; }
 .prose p { margin: 1.25rem 0; }
+.visualization { margin: 2rem 0 2.5rem; }
+.visualization iframe {
+  display: block;
+  width: 100%;
+  height: min(70vh, 40rem);
+  min-height: 28rem;
+  border: 1px solid #c8d4cc;
+  border-radius: .85rem;
+  background: #f3f7f4;
+}
+.visualization figcaption { margin-top: .6rem; color: #49655c; font-size: .9rem; }
 .concept-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .75rem; padding: 0; list-style: none; }
 .concept-list a { display: block; min-height: 100%; padding: 1rem; border: 1px solid #c8d4cc; border-radius: .75rem; background: #faf9f4; text-decoration: none; }
 .related { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #c8d4cc; }
