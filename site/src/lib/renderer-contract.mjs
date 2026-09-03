@@ -4,7 +4,7 @@ import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import schema from "../schemas/biophysics-renderer-v1.schema.json" with { type: "json" };
 
-export const RENDERER_REVISION = "590e585c20bb8950b5801d3ec57e38d49a5b03e3";
+export const RENDERER_REVISION = "ccdf74461699c671a9f68cf3626f0cc0a9fa108a";
 export const MAX_SPECIFICATION_BYTES = 1_000_000;
 export const MAX_SDF_BYTES = 1_000_000;
 export const MAX_SDF_ATOMS = 1_024;
@@ -39,24 +39,9 @@ export function assertRendererSpecification(specification) {
     if (specification.initial !== undefined && !identifiers.includes(specification.initial)) {
       throw new Error(`Initial molecule does not exist: ${specification.initial}`);
     }
-  } else if (specification.kind === "mitochondrion") {
-    assertMitochondrionGeometry(specification.geometry);
   }
 
   return specification;
-}
-
-function assertMitochondrionGeometry(geometry) {
-  if (geometry.length < geometry.radius * 2) {
-    throw new Error("Mitochondrion length must be at least its diameter");
-  }
-  const matrixRadius = geometry.radius - geometry.membraneThickness * 2 - geometry.intermembraneGap;
-  if (matrixRadius <= 0) {
-    throw new Error("Mitochondrion membrane layers must leave space for the matrix");
-  }
-  if (geometry.cristae.depth >= matrixRadius * 2) {
-    throw new Error("Cristae depth must be smaller than the matrix diameter");
-  }
 }
 
 function assertRendererStringLengths(specification) {
