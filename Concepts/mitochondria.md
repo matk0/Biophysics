@@ -4,17 +4,11 @@ localized_titles:
   sk: Mitochondrie
 type: concept
 created: 2026-09-02
-updated: 2026-09-02
+updated: 2026-09-03
 sources: []
 tags: [mitochondrial-biophysics]
 primary_branch: mitochondrial-biophysics
 branches: [mitochondrial-biophysics]
-visualizations:
-  - id: mitochondrion-cutaway
-    titles:
-      en: Mitochondrion cutaway
-      sk: Prierez mitochondriou
-    specification: Assets/concepts/mitochondria/mitochondrion-cutaway.v1.json
 ---
 
 # Mitochondria
