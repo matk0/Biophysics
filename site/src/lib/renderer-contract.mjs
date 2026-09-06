@@ -3,8 +3,10 @@ import path from "node:path";
 
 import Ajv2020 from "ajv/dist/2020.js";
 import schema from "../schemas/biophysics-renderer-v1.schema.json" with { type: "json" };
+import sceneSchema from "../schemas/biophysics-renderer-v2.schema.json" with { type: "json" };
+import { assertEmbeddedGlb } from "./scientific-assets.mjs";
 
-export const RENDERER_REVISION = "ccdf74461699c671a9f68cf3626f0cc0a9fa108a";
+export const RENDERER_REVISION = "a5de2f257bc259e526313e52b7226f294e2306ec";
 export const MAX_SPECIFICATION_BYTES = 1_000_000;
 export const MAX_SDF_BYTES = 1_000_000;
 export const MAX_SDF_ATOMS = 1_024;
@@ -12,22 +14,25 @@ export const MAX_SDF_BONDS = 2_048;
 
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 const validateSpecification = ajv.compile(schema);
+const validateSceneSpecification = ajv.compile(sceneSchema);
 
 export function assertRendererSpecification(specification) {
+  const version = specification?.version === 2 ? 2 : 1;
   let serialized;
   try {
     serialized = JSON.stringify(specification);
   } catch {
-    throw new Error("Invalid renderer v1 specification: value must be JSON serializable");
+    throw new Error(`Invalid renderer v${version} specification: value must be JSON serializable`);
   }
   if (serialized === undefined) {
-    throw new Error("Invalid renderer v1 specification: value must be JSON serializable");
+    throw new Error(`Invalid renderer v${version} specification: value must be JSON serializable`);
   }
   if (new TextEncoder().encode(serialized).byteLength > MAX_SPECIFICATION_BYTES) {
-    throw new Error(`Invalid renderer v1 specification: exceeds ${MAX_SPECIFICATION_BYTES} bytes`);
+    throw new Error(`Invalid renderer v${version} specification: exceeds ${MAX_SPECIFICATION_BYTES} bytes`);
   }
-  if (!validateSpecification(specification)) {
-    throw new Error(`Invalid renderer v1 specification: ${ajv.errorsText(validateSpecification.errors)}`);
+  const validate = version === 2 ? validateSceneSpecification : validateSpecification;
+  if (!validate(specification)) {
+    throw new Error(`Invalid renderer v${version} specification: ${ajv.errorsText(validate.errors)}`);
   }
 
   assertRendererStringLengths(specification);
@@ -40,6 +45,18 @@ export function assertRendererSpecification(specification) {
       throw new Error(`Initial molecule does not exist: ${specification.initial}`);
     }
   }
+  if (specification.kind === "scene_collection") {
+    const identifiers = specification.items.map(({ id }) => id);
+    if (new Set(identifiers).size !== identifiers.length) throw new Error("Scene collection item ids must be unique");
+    if (specification.initial !== undefined && !identifiers.includes(specification.initial)) {
+      throw new Error(`Initial scene does not exist: ${specification.initial}`);
+    }
+    const { center, radius } = specification.framing;
+    const scale = specification.display.metersPerUnit;
+    if (scale > 1e12 || radius / scale < 1e-6 || [...center, radius].some((value) => !Number.isFinite(value / scale) || Math.abs(value / scale) > 1e6)) {
+      throw new Error("Scene framing must use a radius of 0.000001–1000000 display units and a bounded centre");
+    }
+  }
 
   return specification;
 }
@@ -48,7 +65,7 @@ function assertRendererStringLengths(specification) {
   for (const localized of localizedValues(specification)) {
     const translations = typeof localized === "string" ? [localized] : Object.values(localized);
     if (translations.some((value) => value.length === 0 || value.length > 256)) {
-      throw new Error("Invalid renderer v1 specification: localized text has an invalid length");
+      throw new Error(`Invalid renderer v${specification.version} specification: localized text has an invalid length`);
     }
   }
   for (const source of moleculeSources(specification)) {
@@ -65,6 +82,9 @@ function localizedValues(specification) {
   const values = [specification.label, specification.accessibilityLabel];
   if (specification.kind === "molecule_collection") {
     values.push(...specification.items.map(({ label }) => label));
+  }
+  if (specification.kind === "scene_collection") {
+    values.push(specification.display.caption, ...specification.items.flatMap(({ label, description }) => [label, description]));
   }
   return values.filter((value) => value !== undefined);
 }
@@ -91,6 +111,14 @@ export async function normalizeRendererSpecification(specification, options) {
       items: await Promise.all(specification.items.map(async (item) => ({
         ...item,
         data: await normalizeSdfSource(item.data, context),
+      }))),
+    };
+  } else if (specification.kind === "scene_collection") {
+    normalized = {
+      ...specification,
+      items: await Promise.all(specification.items.map(async (item) => ({
+        ...item,
+        data: await normalizeFileSource(item.data, context, "glb"),
       }))),
     };
   } else {
@@ -191,24 +219,29 @@ async function normalizeSdfSource(source, context) {
     assertSdfV2000(source.text);
     return source;
   }
+  return normalizeFileSource(source, context, "sdf");
+}
 
+async function normalizeFileSource(source, context, extension) {
+  const type = extension === "sdf" ? "Molecule" : "Scene";
   const segments = source.url.split("/");
   if (
     segments.length === 0
-    || !source.url.endsWith(".sdf")
+    || !source.url.endsWith(`.${extension}`)
     || segments.some((segment) => !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(segment))
   ) {
-    throw new Error(`Molecule data must use a contained relative SDF path: ${source.url}`);
+    throw new Error(`${type} data must use a contained relative ${extension.toUpperCase()} path: ${source.url}`);
   }
   const target = path.resolve(path.dirname(context.specification), ...segments);
   if (!containedPath(context.root, target)) {
-    throw new Error(`Molecule data must use a contained relative SDF path: ${source.url}`);
+    throw new Error(`${type} data must use a contained relative ${extension.toUpperCase()} path: ${source.url}`);
   }
   const realTarget = await realpath(target);
   if (!containedPath(context.realRoot, realTarget)) {
-    throw new Error(`Molecule data must use a contained relative SDF path: ${source.url}`);
+    throw new Error(`${type} data must use a contained relative ${extension.toUpperCase()} path: ${source.url}`);
   }
-  assertSdfV2000(await readFile(realTarget, "utf8"));
+  if (extension === "sdf") assertSdfV2000(await readFile(realTarget, "utf8"));
+  else assertEmbeddedGlb(await readFile(realTarget));
 
   const publicPath = path.relative(context.root, target)
     .split(path.sep)

@@ -5,6 +5,13 @@ import path from "node:path";
 import matter from "gray-matter";
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
+import {
+  ASSET_CONTENT_TYPES,
+  assertEmbeddedGlb,
+  declaredAssetReference,
+  readContainedAsset,
+  verifyGeneratedAssets,
+} from "./scientific-assets.mjs";
 
 import {
   assertSdfV2000,
@@ -122,6 +129,15 @@ export function localizeConcept(concept, locale) {
       .update(concept.content)
       .digest("hex"),
     body: renderMarkdown(markdown, locale),
+    ...(concept.data.scientific_model ? {
+      model_definition: {
+        body: renderMarkdown(section(concept.content, locale === "sk" ? "Definícia modelu" : "Model definition"), locale),
+        downloads: (concept.data.scientific_model.downloads ?? []).map(({ path: assetPath, labels }) => ({
+          label: labels?.[locale] ?? labels?.en ?? path.basename(assetPath),
+          url: `${origin}${declaredAssetReference(concept.slug, assetPath).publicPath}`,
+        })),
+      },
+    } : {}),
     related: conceptLinks(markdown, locale),
     visualizations: (concept.data.visualizations ?? []).map(({ id, titles, selected }) => ({
       id,
@@ -133,7 +149,7 @@ export function localizeConcept(concept, locale) {
 }
 
 export function conceptPayload(localizedConcept) {
-  const { body: _body, ...payload } = localizedConcept;
+  const { body: _body, model_definition: _model, ...payload } = localizedConcept;
   return payload;
 }
 
@@ -161,9 +177,10 @@ export async function loadVisualization(concept, id) {
   }
 
   const specification = JSON.parse(await readFile(realSpecificationPath, "utf8"));
-  if (specification.version !== 1 || specification.id !== id) {
+  if (![1, 2].includes(specification.version) || specification.id !== id) {
     throw new Error(`Visualization identity mismatch: ${concept}/${id}`);
   }
+  const manifest = specification.version === 2 ? await verifyConceptGeneration(conceptPage) : undefined;
 
   const normalized = await normalizeRendererSpecification(specification, {
     concept,
@@ -174,7 +191,69 @@ export async function loadVisualization(concept, id) {
   for (const source of moleculeSources(normalized)) {
     if (source.url !== undefined) publicStructureReference(concept, source.url);
   }
+  if (normalized.version === 2) {
+    for (const { data } of normalized.items) {
+      const asset = publicAssetReference(concept, data.url);
+      if (!manifest.outputs.some(({ path: output }) => output === `Assets/concepts/${concept}/${asset.asset}`)) {
+        throw new Error(`Scene is not declared in the generated asset manifest: ${data.url}`);
+      }
+    }
+  }
   return normalized;
+}
+
+async function verifyConceptGeneration(conceptPage) {
+  const declaration = conceptPage.data.scientific_model;
+  if (!declaration?.generated) throw new Error(`Missing generated asset declaration: ${conceptPage.slug}`);
+  return verifyGeneratedAssets({ vaultRoot: VAULT_ROOT, concept: conceptPage.slug, manifestPath: declaration.generated });
+}
+
+function publicAssetReference(concept, sourceUrl) {
+  const url = new URL(sourceUrl);
+  const prefix = `/assets/concepts/${concept}/`;
+  if (url.origin !== publicSiteOrigin() || url.username || url.password || url.search || url.hash || !url.pathname.startsWith(prefix)) {
+    throw new Error(`Asset URL cannot be published by this site: ${sourceUrl}`);
+  }
+  return declaredAssetReference(concept, `Assets/concepts/${concept}/${url.pathname.slice(prefix.length)}`);
+}
+
+export async function loadConceptAssetPaths() {
+  const assets = new Map();
+  for (const concept of await loadConcepts()) {
+    if (!concept.data.scientific_model) continue;
+    const manifest = await verifyConceptGeneration(concept);
+    for (const { path: assetPath } of manifest.outputs) {
+      const reference = declaredAssetReference(concept.slug, assetPath);
+      assets.set(reference.publicPath, reference);
+    }
+    const declared = new Set([...manifest.sources, ...manifest.outputs].map(({ path: assetPath }) => assetPath));
+    declared.add(concept.data.scientific_model.generated);
+    for (const { path: assetPath } of concept.data.scientific_model.downloads ?? []) {
+      if (!declared.has(assetPath)) throw new Error(`Download is not declared in the generated asset manifest: ${assetPath}`);
+      const reference = declaredAssetReference(concept.slug, assetPath);
+      assets.set(reference.publicPath, reference);
+    }
+    for (const { id } of concept.data.visualizations ?? []) {
+      const specification = await loadVisualization(concept.slug, id);
+      if (specification.version !== 2) continue;
+      for (const { data } of specification.items) {
+        const reference = publicAssetReference(concept.slug, data.url);
+        assets.set(reference.publicPath, reference);
+      }
+    }
+  }
+  return [...assets.values()].sort((a, b) => a.publicPath.localeCompare(b.publicPath));
+}
+
+export async function loadConceptAsset(concept, asset) {
+  if (!SAFE_ID.test(concept)) throw new Error("Invalid concept identifier");
+  const reference = declaredAssetReference(concept, `Assets/concepts/${concept}/${asset}`);
+  if (!(await loadConceptAssetPaths()).some(({ publicPath }) => publicPath === reference.publicPath)) {
+    throw new Error(`Unknown published concept asset: ${concept}/${asset}`);
+  }
+  const bytes = await readContainedAsset(VAULT_ROOT, `Assets/concepts/${concept}/${asset}`, path.resolve(ASSETS_ROOT, concept));
+  if (asset.endsWith(".glb")) assertEmbeddedGlb(bytes);
+  return { bytes, contentType: ASSET_CONTENT_TYPES[path.extname(asset)] };
 }
 
 export async function loadMoleculeStructure(concept, molecule) {

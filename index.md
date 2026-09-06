@@ -2,17 +2,18 @@
 title: Index
 type: index
 created: 2026-08-30
-updated: 2026-09-02
+updated: 2026-09-06
 sources: []
 tags: [index, navigation]
 primary_branch: null
-branches: [biochemistry, lipids, molecular-genetics, neurochemistry, mitochondrial-biophysics]
+branches: [atomic-physics, biochemistry, lipids, molecular-genetics, neurochemistry, mitochondrial-biophysics]
 ---
 
 # Index
 
 ## Branches
 
+- [[Branches/atomic-physics|Atomic physics]] — Atoms, electronic states, and their interactions. [1 concept, 0 sources]
 - [[Branches/biochemistry|Biochemistry]] — Nutrients, amino acids, proteins, and transformations of living matter. [8 concepts, 0 sources]
 - [[Branches/lipids|Lipids]] — Biological lipids, fatty acids, and their structural and metabolic roles. [2 concepts, 1 source]
 - [[Branches/molecular-genetics|Molecular genetics]] — DNA, genes, chromosomes, and protein synthesis. [5 concepts, 0 sources]
@@ -34,6 +35,7 @@ branches: [biochemistry, lipids, molecular-genetics, neurochemistry, mitochondri
 - [[Concepts/fats|Fats]] — Biological lipids used in energy storage, membranes, insulation, protection, signalling, and hormone regulation. [0 sources]
 - [[Concepts/fatty-acids|Fatty acids]] — Hydrocarbon-chain molecules that build lipids and can supply energy and mitochondrial electron flow. [1 source]
 - [[Concepts/genes|Genes]] — Segments of DNA whose information is used by cells. [0 sources]
+- [[Concepts/hydrogen|Hydrogen]] — The one-proton element, its atomic states, and the distinction between H, H₂, and H⁺. [0 sources]
 - [[Concepts/macronutrients|Macronutrients]] — Carbohydrates, proteins, and fats that make up the main nutrient groups in food. [0 sources]
 - [[Concepts/melatonin|Melatonin]] — A serotonin-derived circadian signal connected to temperature regulation and mitochondrial function. [2 sources]
 - [[Concepts/micronutrients|Micronutrients]] — Vitamins, minerals, trace elements, and other small food components. [0 sources]
@@ -45,6 +47,10 @@ branches: [biochemistry, lipids, molecular-genetics, neurochemistry, mitochondri
 - [[Concepts/serotonin|Serotonin]] — A tryptophan-derived neurotransmitter whose production and distribution depend on biochemical and environmental context. [1 source]
 
 ## By Branch
+
+### Atomic physics
+
+- **Concept:** [[Concepts/hydrogen|Hydrogen]]
 
 ### Biochemistry
 

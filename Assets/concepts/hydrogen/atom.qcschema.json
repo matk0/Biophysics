@@ -1,0 +1,12 @@
+{
+  "schema_name": "qcschema_molecule",
+  "schema_version": 2,
+  "name": "Isolated neutral protium",
+  "symbols": ["H"],
+  "geometry": [0.0, 0.0, 0.0],
+  "mass_numbers": [1],
+  "molecular_charge": 0,
+  "molecular_multiplicity": 2,
+  "fix_com": true,
+  "fix_orientation": true
+}

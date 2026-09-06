@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "Hydrogen"
+    metersPerUnit = 1e-10
+    upAxis = "Z"
+)
+
+def Xform "Hydrogen" (
+    doc = "Stationary electron probability density. The two 2p_z lobes together enclose 90%; neither state depicts an electron orbit."
+    variants = {
+        string state = "1s"
+    }
+    prepend variantSets = "state"
+)
+{
+    custom asset science:atom = @atom.qcschema.json@
+    custom string science:atomIdentifier = "urn:biophysics:atom:protium:neutral"
+    custom string science:atomSchema = "qcschema_molecule/2"
+    custom string science:atomSha256 = "2eb5191599f42ccc83c98a8e2fa3c99d2ca1df99e11ee291fea6451e7424fec2"
+    custom asset science:model = @model.v1.json@
+    custom string science:modelIdentifier = "urn:biophysics:hydrogen:stationary-density:v1"
+    custom string science:modelSchema = "urn:biophysics:schema:hydrogen-analytical-model:v1"
+    custom string science:modelSha256 = "0046538f8eb885f1a8769fb0af455ce5bb4ffca43ab400c84f472ceae9e2c0b3"
+    variantSet "state" = {
+        "1s" {
+            def Xform "Density" (
+                prepend references = @layers/density-1s.usda@</Density>
+            )
+            {
+            }
+
+        }
+        "2p-z" {
+            def Xform "Density" (
+                prepend references = @layers/density-2p-z.usda@</Density>
+            )
+            {
+            }
+
+        }
+    }
+}
+

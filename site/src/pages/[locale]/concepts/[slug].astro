@@ -30,6 +30,13 @@ const visualizations = concept.visualizations.map((visualization) => rendererEmb
       </figure>
     ))}
     <div class="prose" set:html={concept.body}></div>
+    {concept.model_definition && (
+      <details class="model-definition">
+        <summary>{concept.locale === "sk" ? "Definícia modelu a súbory" : "Model definition and files"}</summary>
+        <div class="prose" set:html={concept.model_definition.body}></div>
+        <ul>{concept.model_definition.downloads.map(({ label, url }) => <li><a href={url} download>{label}</a></li>)}</ul>
+      </details>
+    )}
     {concept.related.length > 0 && (
       <aside class="related">
         <h2>{concept.locale === "sk" ? "Súvisiace pojmy" : "Related concepts"}</h2>

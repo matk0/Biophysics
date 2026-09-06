@@ -1,0 +1,49 @@
+{
+  "schema": "hydrogen-metrics/v1",
+  "states": {
+    "1s": {
+      "bounds_angstrom": [
+        [
+          -1.4082252979278564,
+          -1.4082252979278564,
+          -1.4082252979278564
+        ],
+        [
+          1.4082252979278564,
+          1.4082252979278564,
+          1.4082252979278564
+        ]
+      ],
+      "closed_oriented_manifold": true,
+      "components": 1,
+      "full_space_probability": 0.9,
+      "isovalue_bohr_inverse_cubed": 0.0015538023489812126,
+      "mesh_probability": 0.8999322411904508,
+      "quadrature_change": 3.3306690738754696e-15,
+      "triangles": 32512,
+      "vertices": 16258
+    },
+    "2p-z": {
+      "bounds_angstrom": [
+        [
+          -3.3450164794921875,
+          -3.3450164794921875,
+          -4.830265045166016
+        ],
+        [
+          3.3450164794921875,
+          3.3450164794921875,
+          4.830265045166016
+        ]
+      ],
+      "closed_oriented_manifold": true,
+      "components": 2,
+      "full_space_probability": 0.8999999999999999,
+      "isovalue_bohr_inverse_cubed": 9.000210236823345e-05,
+      "mesh_probability": 0.8998983710260939,
+      "quadrature_change": 2.220446049250313e-16,
+      "triangles": 65024,
+      "vertices": 32516
+    }
+  }
+}

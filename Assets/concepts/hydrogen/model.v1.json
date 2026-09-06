@@ -1,0 +1,57 @@
+{
+  "schema": "hydrogen-analytical-model/v1",
+  "schema_identifier": "urn:biophysics:schema:hydrogen-analytical-model:v1",
+  "identifier": "urn:biophysics:hydrogen:stationary-density:v1",
+  "title": "Hydrogen stationary electron probability density",
+  "atom": "atom.qcschema.json",
+  "atom_identifier": "urn:biophysics:atom:protium:neutral",
+  "assumptions": [
+    "Isolated neutral protium with one electron",
+    "Fixed point proton at the coordinate origin",
+    "Nonrelativistic Coulomb Hamiltonian",
+    "No applied field; spin-dependent and radiative effects omitted"
+  ],
+  "qcschema_scope": "The molecular record identifies the nucleus, charge and multiplicity. The analytical electronic state is specified here; it is not determined by charge and multiplicity.",
+  "coordinates": {"unit": "bohr", "handedness": "right", "orbital_axis": "z"},
+  "density_unit": "bohr^-3",
+  "density_meaning": "Probability per unit volume for one electron; integral over all space equals one.",
+  "constants": {
+    "edition": "CODATA 2022",
+    "bohr_m": 5.29177210544e-11,
+    "bohr_m_standard_uncertainty": 8.2e-21,
+    "hartree_ev": 27.211386245981,
+    "source": "https://physics.nist.gov/cuu/Constants/Table/allascii.txt"
+  },
+  "states": {
+    "1s": {"n": 1, "l": 0, "m_l": 0, "density": "exp(-2*r)/pi", "energy_hartree": -0.5},
+    "2p-z": {"n": 2, "l": 1, "m_l": 0, "density": "z^2*exp(-r)/(32*pi)", "energy_hartree": -0.125}
+  },
+  "surface": {
+    "definition": "Boundary of the full-space superlevel set rho >= isovalue whose probability integral is 0.9",
+    "probability": 0.9,
+    "remaining_probability": 0.1,
+    "profile_intervals": 128,
+    "azimuth_segments": 128,
+    "analytical_probability_tolerance": 1e-10,
+    "mesh_probability_tolerance": 0.001,
+    "quadrature_tolerance": 1e-5,
+    "finite_domain_normalization": false
+  },
+  "presentation": {
+    "color_linear_rgb": [0.12, 0.45, 0.72],
+    "color_meaning": "Illustrative; both lobes represent nonnegative probability density",
+    "opacity": 1.0,
+    "roughness": 0.32,
+    "usd_unit": "angstrom",
+    "usd_meters_per_unit": 1e-10,
+    "usd_up_axis": "Z",
+    "gltf_unit": "meter",
+    "gltf_up_axis": "Y",
+    "gltf_axis_mapping": ["x", "z", "-y"]
+  },
+  "sources": [
+    {"title": "Hydrogen wavefunctions, Table 3.3, printed page 74", "url": "https://www.columbia.edu/~jcc2161/documents/IQM.pdf#page=82"},
+    {"title": "Stationary states", "url": "https://ocw.mit.edu/courses/8-04-quantum-physics-i-spring-2013/e275e8c6ec64b860d5c2926c0b507c4e_MIT8_04S13_Lec06.pdf"},
+    {"title": "MolSSI QCSchema molecular fields", "url": "https://molssi-qc-schema.readthedocs.io/en/latest/auto_topology.html"}
+  ]
+}

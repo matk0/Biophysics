@@ -8,6 +8,8 @@ import {
   loadMoleculeStructure,
   loadMoleculeStructurePaths,
   loadVisualization,
+  loadConceptAssetPaths,
+  loadConceptAsset,
 } from "../src/lib/vault.mjs";
 
 const expectedSlugs = [
@@ -19,6 +21,7 @@ const expectedSlugs = [
   "fats",
   "fatty-acids",
   "genes",
+  "hydrogen",
   "macronutrients",
   "melatonin",
   "micronutrients",
@@ -29,6 +32,24 @@ const expectedSlugs = [
   "proteins",
   "serotonin",
 ];
+
+test("hydrogen publishes a bilingual atomic concept with stationary-state scenes and model downloads", async () => {
+  const hydrogen = (await loadConcepts()).find(({ slug }) => slug === "hydrogen");
+  assert.ok(hydrogen, "Hydrogen must be in the public catalogue");
+  assert.equal(hydrogen.data.primary_branch, "atomic-physics");
+  assert.deepEqual(hydrogen.data.sources, []);
+  for (const locale of ["en", "sk"]) {
+    const localized = localizeConcept(hydrogen, locale);
+    assert.ok(localized.title);
+    assert.match(localized.body, /H<sub>2<\/sub>/);
+    assert.match(localized.body, /H<sup>\+<\/sup>/);
+    assert.equal(localized.visualizations[0].id, "explorer");
+    assert.ok(localized.model_definition.body);
+    assert.ok(localized.model_definition.downloads.some(({ url }) => url.endsWith("/model.v1.json")));
+    assert.ok(localized.model_definition.downloads.some(({ url }) => url.endsWith("/scene.usda")));
+    assert.ok(localized.model_definition.downloads.some(({ url }) => url.endsWith("/hydrogen-bundle.zip")));
+  }
+});
 
 test("the public catalogue exposes every concept in English and Slovak", async () => {
   const concepts = await loadConcepts();
@@ -137,6 +158,7 @@ test("scientific visualization specifications are served from concept assets", a
   assert.deepEqual(emitted.sort(), [
     "amino-acids/proteinogenic-amino-acids",
     "dna/double-helix",
+    "hydrogen/explorer",
   ]);
 
   const aminoAcids = await loadVisualization("amino-acids", "proteinogenic-amino-acids");
@@ -161,4 +183,26 @@ test("scientific visualization specifications are served from concept assets", a
     loadVisualization("../Raw", "anything"),
     /Invalid visualization identifier/,
   );
+});
+
+test("published hydrogen scenes and scientific records resolve through declared asset routes", async () => {
+  const specification = await loadVisualization("hydrogen", "explorer");
+  assert.equal(specification.version, 2);
+  assert.equal(specification.kind, "scene_collection");
+  assert.deepEqual(specification.items.map(({ id }) => id), ["1s", "2p-z"]);
+  assert.equal(specification.initial, "1s");
+  assert.deepEqual(specification.framing, { center: [0, 0, 0], radius: 6e-10 });
+  for (const { data } of specification.items) {
+    assert.match(data.url, /^https:\/\/[^/]+\/assets\/concepts\/hydrogen\/scenes\/scene-[a-z0-9-]+\.glb$/);
+    const { bytes, contentType } = await loadConceptAsset("hydrogen", new URL(data.url).pathname.split("/hydrogen/")[1]);
+    assert.equal(contentType, "model/gltf-binary");
+    assert.equal(bytes.readUInt32LE(0), 0x46546c67);
+  }
+  const paths = await loadConceptAssetPaths();
+  for (const asset of ["model.v1.json", "atom.qcschema.json", "generated.v1.json", "scene.usda", "hydrogen-bundle.zip"]) {
+    assert.ok(paths.some((entry) => entry.concept === "hydrogen" && entry.asset === asset), `Missing published asset ${asset}`);
+    assert.ok((await loadConceptAsset("hydrogen", asset)).bytes.length > 0);
+  }
+  await assert.rejects(loadConceptAsset("hydrogen", "../../../Raw/private.json"), /contained.*path/i);
+  await assert.rejects(loadConceptAsset("hydrogen", "undeclared.json"), /unknown published/i);
 });

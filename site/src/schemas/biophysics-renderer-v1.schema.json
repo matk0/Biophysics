@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:biophysics-renderer:specification:v1",
-  "$comment": "Pinned to biophysics-renderer revision ccdf74461699c671a9f68cf3626f0cc0a9fa108a.",
+  "$comment": "Pinned to biophysics-renderer revision a5de2f257bc259e526313e52b7226f294e2306ec.",
   "title": "Biophysics renderer v1 specification",
   "oneOf": [
     { "$ref": "#/$defs/molecule" },

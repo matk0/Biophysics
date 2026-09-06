@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "kind": "scene_collection",
+  "id": "explorer",
+  "label": { "en": "Hydrogen atom", "sk": "Atóm vodíka" },
+  "accessibilityLabel": { "en": "Stationary hydrogen electron probability surfaces, with a common physical scale", "sk": "Stacionárne plochy pravdepodobnosti elektrónu vo vodíku so spoločnou fyzikálnou mierkou" },
+  "items": [
+    {
+      "id": "1s",
+      "label": { "en": "1s · ground state", "sk": "1s · základný stav" },
+      "description": { "en": "Spherical electron probability density centred on the proton.", "sk": "Sférická hustota pravdepodobnosti elektrónu so stredom v protóne." },
+      "data": { "format": "glb", "url": "scenes/scene-1s.glb" }
+    },
+    {
+      "id": "2p-z",
+      "label": { "en": "2p_z · excited state", "sk": "2p_z · excitovaný stav" },
+      "description": { "en": "Two lobes separated by a plane of zero probability density. Colour is illustrative.", "sk": "Dva laloky oddeľuje rovina s nulovou hustotou pravdepodobnosti. Farba je ilustračná." },
+      "data": { "format": "glb", "url": "scenes/scene-2p-z.glb" }
+    }
+  ],
+  "initial": "1s",
+  "framing": { "center": [0, 0, 0], "radius": 6e-10 },
+  "display": {
+    "metersPerUnit": 1e-10,
+    "unit": "Å",
+    "caption": { "en": "90% enclosed probability; 10% remains outside. Stationary states, not electron orbits or a transition animation.", "sk": "90 % pravdepodobnosti vnútri; 10 % zostáva vonku. Stacionárne stavy, nie dráhy elektrónu ani animácia prechodu." }
+  }
+}

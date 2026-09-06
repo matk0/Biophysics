@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:biophysics-renderer:specification:v2",
+  "title": "Biophysics renderer v2 scene collection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "kind", "id", "items", "framing", "display"],
+  "properties": {
+    "version": { "const": 2 },
+    "kind": { "const": "scene_collection" },
+    "id": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/identifier" },
+    "label": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/localizedText" },
+    "accessibilityLabel": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/localizedText" },
+    "initial": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/identifier" },
+    "items": {
+      "type": "array", "minItems": 1, "maxItems": 64,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["id", "data"],
+        "properties": {
+          "id": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/identifier" },
+          "label": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/localizedText" },
+          "description": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/localizedText" },
+          "data": {
+            "type": "object", "additionalProperties": false, "required": ["format", "url"],
+            "properties": {
+              "format": { "const": "glb" },
+              "url": { "type": "string", "minLength": 1, "maxLength": 2048 }
+            }
+          }
+        }
+      }
+    },
+    "framing": {
+      "type": "object", "additionalProperties": false, "required": ["center", "radius"],
+      "properties": {
+        "center": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number" } },
+        "radius": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "display": {
+      "type": "object", "additionalProperties": false, "required": ["metersPerUnit", "unit", "caption"],
+      "properties": {
+        "metersPerUnit": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000000000000 },
+        "unit": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "caption": { "$ref": "urn:biophysics-renderer:specification:v1#/$defs/localizedText" }
+      }
+    }
+  }
+}

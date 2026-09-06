@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "path": "Assets/concepts/hydrogen/atom.qcschema.json",
+      "sha256": "2eb5191599f42ccc83c98a8e2fa3c99d2ca1df99e11ee291fea6451e7424fec2"
+    },
+    {
+      "path": "Assets/concepts/hydrogen/layers/density-1s.usda",
+      "sha256": "b3118b3d16b346d04faec8440af634dd4cb133d7ad00bb30366304e44a4eec10"
+    },
+    {
+      "path": "Assets/concepts/hydrogen/layers/density-2p-z.usda",
+      "sha256": "65c02728084b6d81af524c3118531a02f8c0744aee8b05b3dd36f5309b0c356e"
+    },
+    {
+      "path": "Assets/concepts/hydrogen/metrics.v1.json",
+      "sha256": "3825d845ece7bcd66f55cdc2d92c9eef80bb9caab8b739485b2d912e02b564f0"
+    },
+    {
+      "path": "Assets/concepts/hydrogen/model.v1.json",
+      "sha256": "0046538f8eb885f1a8769fb0af455ce5bb4ffca43ab400c84f472ceae9e2c0b3"
+    },
+    {
+      "path": "Assets/concepts/hydrogen/scene.usda",
+      "sha256": "82387c5fc43b7dfe96662fad64aa11b383ce246eb253de3060576e2e6ff46a12"
+    },
+    {
+      "path": "Assets/concepts/hydrogen/scenes/scene-1s.glb",
+      "sha256": "ae37fdb52e052b61aae08ed41338298e51132c986733a8c9c928264030e96931"
+    },
+    {
+      "path": "Assets/concepts/hydrogen/scenes/scene-2p-z.glb",
+      "sha256": "e116efd136b75166e944d9f60d09d6b1f3c590e7be6fc45790b2d67c007f7767"
+    },
+    {
+      "path": "tools/hydrogen/generate.py",
+      "sha256": "57ee50d98541577037ed3e91800cdd7f622d1b3fbfc631562c794fcc567b9c8f"
+    },
+    {
+      "path": "tools/hydrogen/requirements.txt",
+      "sha256": "8fcabc3b8cc7a4f9307e9283081aa251d34320b27ffd3345c4b1d8fb59bd60f5"
+    },
+    {
+      "path": "tools/hydrogen/test_generate.py",
+      "sha256": "ba3d29eeacb329028345d4462512a2f2f63b9d1ac6259520b87b7fc5dd2d7eba"
+    }
+  ],
+  "schema": "hydrogen-bundle/v1"
+}

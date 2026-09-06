@@ -6,8 +6,8 @@
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
     <title>Scientific model</title>
-    <script type="module" crossorigin src="../assets/index-DlmDtUf0.js"></script>
-    <link rel="stylesheet" crossorigin href="../assets/index-GfYayg9_.css">
+    <script type="module" crossorigin src="../assets/index-CytE25xX.js"></script>
+    <link rel="stylesheet" crossorigin href="../assets/index-DQaKaUIL.css">
   </head>
   <body>
     <main class="embed">
@@ -20,6 +20,16 @@
         <button id="reset" type="button" aria-label="Reset view">↺</button>
       </div>
       <div id="viewport" class="viewport" aria-busy="true"></div>
+      <div class="scene-footer">
+        <div id="scene-details" class="scene-details" hidden>
+          <p id="scene-description" aria-live="polite"></p>
+          <p id="scene-caption"></p>
+        </div>
+        <div id="scale" class="scale" aria-label="Physical scale at the view center" hidden>
+          <span id="scale-label"></span>
+          <span id="scale-line" class="scale-line"></span>
+        </div>
+      </div>
       <p id="status" class="visually-hidden" role="status" aria-live="polite">Loading model</p>
       <div id="error" class="error" role="alert" hidden></div>
     </main>

@@ -18,8 +18,26 @@ const inlineSdf = `Water
 M  END
 `;
 
+test("scene collections preserve metre framing and reject invalid scene choices or scale", () => {
+  const scenes = {
+    version: 2,
+    kind: "scene_collection",
+    id: "explorer",
+    label: { en: "Hydrogen", sk: "Vodík" },
+    items: [{ id: "1s", description: "Stationary state", data: { format: "glb", url: "scenes/scene-1s.glb" } }],
+    initial: "1s",
+    framing: { center: [0, 0, 0], radius: 6e-10 },
+    display: { metersPerUnit: 1e-10, unit: "Å", caption: "90% probability surface" },
+  };
+  assert.equal(assertRendererSpecification(scenes), scenes);
+  assert.throws(() => assertRendererSpecification({ ...scenes, items: [...scenes.items, ...scenes.items] }), /unique/i);
+  assert.throws(() => assertRendererSpecification({ ...scenes, initial: "missing" }), /initial scene/i);
+  assert.throws(() => assertRendererSpecification({ ...scenes, framing: { center: [0, 0, 0], radius: 0 } }), /renderer v2/i);
+  assert.throws(() => assertRendererSpecification({ ...scenes, framing: { center: [1, 0, 0], radius: 6e-10 } }), /display units/i);
+});
+
 test("the pinned renderer v1 contract accepts every supported kind and rejects divergent inputs", () => {
-  assert.equal(RENDERER_REVISION, "ccdf74461699c671a9f68cf3626f0cc0a9fa108a");
+  assert.equal(RENDERER_REVISION, "a5de2f257bc259e526313e52b7226f294e2306ec");
 
   const molecule = {
     version: 1,

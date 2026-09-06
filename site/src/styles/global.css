@@ -42,3 +42,7 @@ h1 { font: 700 clamp(2.5rem, 7vw, 5.5rem)/1.02 Georgia, serif; letter-spacing: -
 .concept-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .75rem; padding: 0; list-style: none; }
 .concept-list a { display: block; min-height: 100%; padding: 1rem; border: 1px solid #c8d4cc; border-radius: .75rem; background: #faf9f4; text-decoration: none; }
 .related { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #c8d4cc; }
+.model-definition { margin-top: 2rem; padding: 1rem 1.25rem; border: 1px solid #c8d4cc; border-radius: .75rem; }
+.model-definition summary { cursor: pointer; font-weight: 650; }
+.model-definition li { margin: .5rem 0; }
+.model-definition a { overflow-wrap: anywhere; }
