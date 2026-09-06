@@ -51,6 +51,37 @@ test("hydrogen publishes a bilingual atomic concept with stationary-state scenes
   }
 });
 
+test("hydrogen API definitions use plain chemical notation while the page keeps formatted notation", async () => {
+  const hydrogen = (await loadConcepts()).find(({ slug }) => slug === "hydrogen");
+  for (const locale of ["en", "sk"]) {
+    const localized = localizeConcept(hydrogen, locale);
+    const { definition } = JSON.parse(JSON.stringify(conceptPayload(localized)));
+    assert.match(definition, /H₂/);
+    assert.match(definition, /H⁺/);
+    assert.doesNotMatch(definition, /[<>]/);
+    assert.match(localized.body, /H<sub>2<\/sub>/);
+    assert.match(localized.body, /H<sup>\+<\/sup>/);
+  }
+});
+
+test("API definitions extract readable text from Markdown, HTML, and character entities", () => {
+  const concept = {
+    slug: "formatted-definition",
+    data: { title: "Formatted definition", updated: "2026-09-06" },
+    content: `## English
+
+H<sub>2</sub> &amp; H<sup>&#43;</sup>: **atoms**, [links](https://example.com), <em>emphasis</em>, and \`state_name\`; x &lt; y.<script>unwanted()</script>
+
+## Slovenčina
+
+Text.`,
+  };
+  assert.equal(
+    conceptPayload(localizeConcept(concept, "en")).definition,
+    "H₂ & H⁺: atoms, links, emphasis, and state_name; x < y.",
+  );
+});
+
 test("the public catalogue exposes every concept in English and Slovak", async () => {
   const concepts = await loadConcepts();
 

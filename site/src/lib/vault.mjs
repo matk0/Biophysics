@@ -80,11 +80,18 @@ function renderMarkdown(markdown, locale) {
 
 function plainText(markdown) {
   const paragraph = markdown.split(/\n\s*\n/, 1)[0] ?? "";
-  return paragraph
+  const withPlainLinks = paragraph
     .replace(/\[\[Concepts\/[^\]|]+\|([^\]]+)\]\]/g, "$1")
-    .replace(/\[\[Concepts\/([^\]]+)\]\]/g, "$1")
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[*_`>#]/g, "")
+    .replace(/\[\[Concepts\/([^\]]+)\]\]/g, "$1");
+  const scripts = { sub: "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎", sup: "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾" };
+  return sanitizeHtml(marked.parse(withPlainLinks), {
+    allowedTags: [],
+    allowedAttributes: {},
+    textFilter: (text, tag) => Object.hasOwn(scripts, tag)
+      ? text.replace(/[0-9+\-=()]/g, (character) => scripts[tag]["0123456789+-=()".indexOf(character)])
+      : text,
+  })
+    .replace(/&(amp|lt|gt);/g, (_, entity) => ({ amp: "&", lt: "<", gt: ">" })[entity])
     .replace(/\s+/g, " ")
     .trim();
 }
