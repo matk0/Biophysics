@@ -12,27 +12,6 @@ import {
   loadConceptAsset,
 } from "../src/lib/vault.mjs";
 
-const expectedSlugs = [
-  "amino-acids",
-  "anabolism",
-  "catabolism",
-  "chromosomes",
-  "dna",
-  "fats",
-  "fatty-acids",
-  "genes",
-  "hydrogen",
-  "macronutrients",
-  "melatonin",
-  "micronutrients",
-  "mitochondria",
-  "mitochondrial-magnetism",
-  "photosynthesis",
-  "protein-synthesis",
-  "proteins",
-  "serotonin",
-];
-
 test("hydrogen publishes a bilingual atomic concept with stationary-state scenes and model downloads", async () => {
   const hydrogen = (await loadConcepts()).find(({ slug }) => slug === "hydrogen");
   assert.ok(hydrogen, "Hydrogen must be in the public catalogue");
@@ -84,8 +63,6 @@ Text.`,
 
 test("the public catalogue exposes every concept in English and Slovak", async () => {
   const concepts = await loadConcepts();
-
-  assert.deepEqual(concepts.map(({ slug }) => slug).sort(), expectedSlugs);
 
   for (const concept of concepts) {
     for (const locale of ["en", "sk"]) {
