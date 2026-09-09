@@ -13,13 +13,6 @@ primary_branch: biochemistry
 branches:
   - biochemistry
   - molecular-genetics
-visualizations:
-  - id: proteinogenic-amino-acids
-    titles:
-      en: Proteinogenic amino acids
-      sk: Proteínogénne aminokyseliny
-    selected: alanine
-    specification: Assets/concepts/amino-acids/proteinogenic-amino-acids.v1.json
 ---
 
 # Amino acids
